@@ -48,10 +48,43 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'root';
-$db['default']['password'] = '';
-$db['default']['database'] = 'penherz';
+//Type 1
+// $url = getenv('mysql://nacg0l5cn3s7k5ah:n539ov4hrdrc9umx@o61qijqeuqnj9chh.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/xr6zj9nx7ddg2wjs');
+// $dbparts = parse_url($url);
+
+// $hostname = $dbparts['host'];
+// $username = $dbparts['user'];
+// $password = $dbparts['pass'];
+// $database = ltrim($dbparts['path'],'/');
+// $db['default']['hostname'] = $hostname;
+// $db['default']['username'] = $username;
+// $db['default']['password'] = $password;
+// $db['default']['database'] = $database;
+
+//Type 2
+$_ENV['JAWSDB_URL'] = "mysql://nacg0l5cn3s7k5ah:n539ov4hrdrc9umx@o61qijqeuqnj9chh.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/xr6zj9nx7ddg2wjs";
+// Else, if running on Heroku
+if(isset($_ENV['JAWSDB_URL'])){
+	$url = $_ENV['JAWSDB_URL'];
+}
+
+Parse connection url
+$connection_info = parse_url($url);
+
+define('DB_HOST', $connection_info['host']);
+define('DB_DATABASE', substr($connection_info['path'], 1));
+define('DB_USER', $connection_info['user']);
+define('DB_PASS', $connection_info['pass']);
+
+$db['default']['hostname'] = constant("DB_HOST");
+$db['default']['username'] = constant("DB_USER");
+$db['default']['password'] = constant("DB_PASS");
+$db['default']['database'] = constant("DB_DATABASE");
+
+// $db['default']['hostname'] = 'localhost';
+// $db['default']['username'] = 'root';
+// $db['default']['password'] = '';
+// $db['default']['database'] = 'penherz';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
